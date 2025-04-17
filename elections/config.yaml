@@ -1,0 +1,8 @@
+title: 13
+voting_method: secret_ballot
+starting_method: manual
+ending_method: scheduled
+ending_picker: 04/24/2025 8:00 PM
+ending: 2025-04-24T20:00:00+02:00
+locale: fr
+tally_method: automatic
