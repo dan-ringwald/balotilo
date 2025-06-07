@@ -350,16 +350,22 @@ class BalotiloAutomation:
                 "voting_method", "secret_ballot"
             )
             form_data["consultation[starting_method]"] = config.get(
-                "starting_method", "manual"
+                "starting_method", "scheduled"
+            )
+            form_data["consultation[starting_picker]"] = config.get(
+                "starting_picker", "06/07/2025 7:00 AM"
+            )
+            form_data["consultation[starting]"] = config.get(
+                "starting", "2025-06-07T07:00:00+02:00"
             )
 
             # Add event start only if ending method is manual_during_event
             if config.get("ending_method") == "manual_during_event":
                 form_data["consultation[event_start]"] = config.get(
-                    "event_start", "2025-04-24T20:00:00+02:00"
+                    "starting", "2025-04-24T20:00:00+02:00"
                 )
                 form_data["event_start_picker"] = config.get(
-                    "event_start_picker", "04/24/2025 8:00 PM"
+                    "starting_picker", "04/24/2025 8:00 PM"
                 )
 
             form_data["consultation[ending_method]"] = config.get(
@@ -369,10 +375,10 @@ class BalotiloAutomation:
             # Add ending date only if ending method is scheduled
             if form_data["consultation[ending_method]"] == "scheduled":
                 form_data["consultation[ending]"] = config.get(
-                    "ending", "2025-04-24T20:00:00+02:00"
+                    "ending", "2025-06-08:20:00+02:00"
                 )
                 form_data["ending_picker"] = config.get(
-                    "ending_picker", "04/24/2025 8:00 PM"
+                    "ending_picker", "06/08/2025 8:00 PM"
                 )
 
             form_data["consultation[locale]"] = config.get("locale", "fr")
@@ -385,7 +391,7 @@ class BalotiloAutomation:
                 f"consultation[questions_attributes][{question_id}][_destroy]"
             ] = "false"
             form_data[f"consultation[questions_attributes][{question_id}][content]"] = (
-                config.get("question_content", "<p>Vote for a list</p>")
+                config.get("question_content", "<p>Votez pour une liste</p>")
             )
             form_data[
                 f"consultation[questions_attributes][{question_id}][type_helper]"
@@ -623,8 +629,18 @@ class BalotiloAutomation:
                 logger.error(f"Missing required files in directory: {dir_name}")
                 continue
 
+            # Create custom title from directory name
+            custom_title = f"PPD 2025 - {dir_name.replace('_', ' ')}"
+            logger.info(f"Creating election with title: {custom_title}")
+
+            # Create a copy of config with the custom title
+            election_config = config.copy()
+            election_config["title"] = custom_title
+
             # Create the election
-            election_id = self.create_election(config, voters_file, candidates_file)
+            election_id = self.create_election(
+                election_config, voters_file, candidates_file
+            )
 
             if election_id:
                 logger.info(f"Election created with ID: {election_id}")
