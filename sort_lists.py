@@ -4,6 +4,9 @@ from pathlib import Path
 
 import yaml
 
+# takes a global candidates csv, and splits it into per-department yamls in subfolders
+# as expected by the script creating the elections on Balotilo
+
 
 def find_department_folder(department_num):
     """

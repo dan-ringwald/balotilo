@@ -4,6 +4,9 @@ from pathlib import Path
 
 import pandas as pd
 
+# This script helps gets a global votant list and split it into small per-departement lists in subfolders, as expected by the script
+# creating the elections on balotilo
+
 
 def extract_emails_from_votants(folder_path):
     """

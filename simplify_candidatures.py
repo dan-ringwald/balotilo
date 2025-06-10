@@ -2,6 +2,8 @@ import re
 
 import pandas as pd
 
+# Script to simplify the first name last name field for candidates
+
 
 def clean_candidate_info(text):
     """
